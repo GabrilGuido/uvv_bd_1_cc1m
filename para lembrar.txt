@@ -1,0 +1,2 @@
+As colunas que possuirem AK (chave alternativa)
+ALTER TABLE nome_tabela ADD CONSTRAINT nome_unique UNIQUE (nome_coluna2)
