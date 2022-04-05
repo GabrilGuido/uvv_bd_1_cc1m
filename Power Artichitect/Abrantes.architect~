@@ -189,7 +189,7 @@
     <column-mapping id="CMP52" populated="true" UUID="981d1acc-6661-4c77-8628-0d2fb6ae41ab" fk-column-ref="COL18" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
    </relationship>
    <relationship id="REL53" populated="true" UUID="e56771f2-4e38-4b6a-8459-4a06e7e0fe26" deferrability="7" deleteRule="3" fk-table-ref="TAB35" fkCardinality="7" identifying="true" name="funcionario_dependente_fk" physicalName="funcionario_dependente_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP54" populated="true" UUID="d2b4636a-5092-43a4-9df5-8b37d44d717f" fk-column-ref="COL36" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
+    <column-mapping id="CMP54" populated="true" UUID="9d7dc4df-5aa7-4498-9591-b040165928ce" fk-column-ref="COL36" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
    </relationship>
    <relationship id="REL55" populated="true" UUID="212944df-f75d-4cdb-a7c6-dbabfc407697" deferrability="7" deleteRule="3" fk-table-ref="TAB44" fkCardinality="7" identifying="true" name="funcionario_trabalha_em_fk" physicalName="funcionario_trabalha_em_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP56" populated="true" UUID="898b8284-0327-47ea-9d52-2b8768f617b7" fk-column-ref="COL45" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
@@ -218,7 +218,7 @@
   <table-link relationship-ref="REL51" pkConnection="0.13043478260869565" fkConnection="0.4864864864864865" rLineColor="0x984ea3" pkLabelText="" fkLabelText="" orientation="33"/>
   <table-link relationship-ref="REL57" pkConnection="0.49834983498349833" fkConnection="0.5" rLineColor="0x984ea3" pkLabelText="" fkLabelText="" orientation="72"/>
   <table-link relationship-ref="REL59" pkConnection="0.5148514851485149" fkConnection="0.48184818481848185" rLineColor="0x984ea3" pkLabelText="" fkLabelText="" orientation="132"/>
-  <table-link relationship-ref="REL53" pkConnection="0.5247148288973384" fkConnection="0.4837662337662338" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
+  <table-link relationship-ref="REL53" pkConnection="0.5247148288973384" fkConnection="0.4837662337662338" rLineColor="0x984ea3" pkLabelText="" fkLabelText="" orientation="132"/>
   <table-link relationship-ref="REL61" pkConnection="0.5313531353135313" fkConnection="0.46863468634686345" rLineColor="0x984ea3" pkLabelText="" fkLabelText="" orientation="132"/>
   <table-link relationship-ref="REL55" pkConnection="1.0" fkConnection="0.0" rLineColor="0x984ea3" pkLabelText="" fkLabelText="" orientation="132"/>
  </play-pen>
