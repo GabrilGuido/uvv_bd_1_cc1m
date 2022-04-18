@@ -1,3 +1,6 @@
+CREATE DATABASE uvv;
+
+USE uvv;
 
 CREATE TABLE funcionario (
                 cpf CHAR(11) NOT NULL,
@@ -137,6 +140,12 @@ ON UPDATE NO ACTION;
 
 ALTER TABLE trabalha_em ADD CONSTRAINT funcionario_trabalha_em_fk
 FOREIGN KEY (cpf_funcionario)
+REFERENCES funcionario (cpf)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE funcionario ADD CONSTRAINT funcionario_funcionario_fk
+FOREIGN KEY (cpf_supervisor)
 REFERENCES funcionario (cpf)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
