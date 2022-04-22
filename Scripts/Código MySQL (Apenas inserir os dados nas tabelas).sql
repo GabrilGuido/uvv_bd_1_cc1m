@@ -9,7 +9,7 @@ CREATE TABLE funcionario (
                 nome_meio CHAR(1) /*Inicial do nome do meio.*/,
                 ultimo_nome VARCHAR(15) NOT NULL /*Sobrenome do funcionário.*/,
                 data_nascimento DATE /*Data de nascimento do funcionário*/,
-                endereco VARCHAR(30) /*Endereço do funcionário.*/,
+                endereco VARCHAR(150) /*Endereço do funcionário.*/,
                 sexo CHAR(1) /*Sexo do funcionário.*/,
                 salario DECIMAL(10,2) /*Salário do funcionário.*/,
                 cpf_supervisor CHAR(11) NOT NULL /*CPF do supervisor. Será uma FK para a própria tabela.*/,
@@ -128,3 +128,12 @@ FOREIGN KEY (numero_projeto)
 REFERENCES projeto (numero_projeto)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
+
+INSERT INTO funcionario VALUES (
+   12345678966, "João", "B", "Silva", '1965-11-09', "Rua das Flores, 751, São Paulo, SP", "M", 30.000, 33344555587, 5 
+);
+
+INSERT INTO funcionario VALUES (
+   33344555587, "Fernando", "T", "Wong", '1955-12-08', "Rua da Lapa, 34, São Paulo, SP", "M", 40.000, 33344555587, 5 
+);
+
