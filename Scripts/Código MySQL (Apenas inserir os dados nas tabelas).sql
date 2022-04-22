@@ -2,7 +2,7 @@ CREATE DATABASE uvv;
 
 USE uvv;
 
---Criandot tabela funcionário
+-- Criandot tabela funcionário
 CREATE TABLE funcionario (
                 cpf CHAR(11) NOT NULL /*CPF do funcionário. Será a PK da tabela.*/,
                 primeiro_nome VARCHAR(15) NOT NULL /*Primeiro nome do funcionário.*/,
@@ -22,7 +22,7 @@ CREATE INDEX funcionario_idx
  ON funcionario
  ( cpf_supervisor );
 
---Criando tabela dependente
+-- Criando tabela dependente
 CREATE TABLE dependente (
                 cpf_funcionario CHAR(11) NOT NULL /*CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.*/,
                 nome_dependente VARCHAR(15) NOT NULL /*Nome do dependente. Faz parte da PK desta tabela.*/,
@@ -33,7 +33,7 @@ CREATE TABLE dependente (
 );
 
 
---Criando tabela departamento
+-- Criando tabela departamento
 CREATE TABLE departamento (
                 numero_departamento INT NOT NULL /*Número do departamento. É a PK desta tabela.*/,
                 nome_departamento VARCHAR(15) NOT NULL /*Nome do departamento. Deve ser único.*/,
@@ -43,11 +43,12 @@ CREATE TABLE departamento (
 );
 
 
---Criando chave alternativa
+-- Criando chave alternativa
 CREATE UNIQUE INDEX departamento_idx
  ON departamento
  ( nome_departamento );
 
+-- Criando tabela projeto
 CREATE TABLE projeto (
                 numero_projeto INT NOT NULL /*Número do projeto. É a PK desta tabela.*/,
                 nome_projeto VARCHAR(15) NOT NULL /*Nome do projeto. Deve ser único.*/,
@@ -57,12 +58,12 @@ CREATE TABLE projeto (
 );
 
 
---Criando chave alternativa
+-- Criando chave alternativa
 CREATE UNIQUE INDEX projeto_idx
  ON projeto
  ( nome_projeto );
 
---Criando tabela trbalha_em
+-- Criando tabela trbalha_em
 CREATE TABLE trabalha_em (
                 cpf_funcionario CHAR(11) NOT NULL /*CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.*/,
                 numero_projeto INT NOT NULL /*Número do projeto. Faz parte da PK desta tabela e é uma FK para a tabela projeto.*/,
@@ -71,7 +72,7 @@ CREATE TABLE trabalha_em (
 );
 
 
-
+-- Criando tabela localizacoes_departamento
 CREATE TABLE localizacoes_departamento (
                 numero_departamento INT NOT NULL /*Número do departamento. Faz parta da PK desta tabela e também é uma FK para a tabela departamento.*/,
                 local VARCHAR(15) NOT NULL /*Localização do departamento. Faz parte da PK desta tabela.*/,
@@ -79,49 +80,49 @@ CREATE TABLE localizacoes_departamento (
 );
 
 
---Adicionando chave primária na tabela departamento
+-- Adicionando chave primária na tabela departamento
 ALTER TABLE departamento ADD CONSTRAINT funcionario_departamento_fk
 FOREIGN KEY (cpf_gerente)
 REFERENCES funcionario (cpf)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
---Adicionando chave primária na tabela depedente
+-- Adicionando chave primária na tabela depedente
 ALTER TABLE dependente ADD CONSTRAINT funcionario_dependente_fk
 FOREIGN KEY (cpf_funcionario)
 REFERENCES funcionario (cpf)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
---Adicionando chave primária na tabela trabalha_em
+-- Adicionando chave primária na tabela trabalha_em
 ALTER TABLE trabalha_em ADD CONSTRAINT funcionario_trabalha_em_fk
 FOREIGN KEY (cpf_funcionario)
 REFERENCES funcionario (cpf)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
---Adicionando chave primária na tabela funcionário
+-- Adicionando chave primária na tabela funcionário
 ALTER TABLE funcionario ADD CONSTRAINT funcionario_funcionario_fk
 FOREIGN KEY (cpf_supervisor)
 REFERENCES funcionario (cpf)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
---Adicionando chave primária na tabela localizações_departamento
+-- Adicionando chave primária na tabela localizações_departamento
 ALTER TABLE localizacoes_departamento ADD CONSTRAINT departamento_localizacoes_departamento_fk
 FOREIGN KEY (numero_departamento)
 REFERENCES departamento (numero_departamento)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
---Adicionando chave primária na tabela projeto
+-- Adicionando chave primária na tabela projeto
 ALTER TABLE projeto ADD CONSTRAINT departamento_projeto_fk
 FOREIGN KEY (numero_departamento)
 REFERENCES departamento (numero_departamento)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
---Adicionando chave primária na tabela trabalha_em
+-- Adicionando chave primária na tabela trabalha_em
 ALTER TABLE trabalha_em ADD CONSTRAINT projeto_trabalha_em_fk
 FOREIGN KEY (numero_projeto)
 REFERENCES projeto (numero_projeto)
