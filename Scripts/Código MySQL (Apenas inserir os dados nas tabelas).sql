@@ -1,3 +1,7 @@
+create user gabrielguido identified by '1337';
+
+grant  all privileges on uvv.*  to gabrielguido;
+
 CREATE DATABASE uvv;
 
 USE uvv;
@@ -12,10 +16,14 @@ CREATE TABLE funcionario (
                 endereco VARCHAR(150) /*Endereço do funcionário.*/,
                 sexo CHAR(1) /*Sexo do funcionário.*/,
                 salario DECIMAL(10,2) /*Salário do funcionário.*/,
-                cpf_supervisor CHAR(11) NOT NULL /*CPF do supervisor. Será uma FK para a própria tabela.*/,
+                cpf_supervisor CHAR(11)  /*CPF do supervisor. Será uma FK para a própria tabela.*/,
                 numero_departamento INT NOT NULL /*Número do departamento do funcionário.*/,
                 PRIMARY KEY (cpf) /*Adicionando chave prímaria para a tabela*/
 );
+
+-- Adcionando constraint check no atributo sexo
+alter table funcionario
+ add constraint check (sexo in ('M', 'F'));
 
 
 CREATE INDEX funcionario_idx
@@ -31,6 +39,10 @@ CREATE TABLE dependente (
                 parentesco VARCHAR(15) /*Descrição do parentesco do dependente com o funcionário.*/,
                 PRIMARY KEY (cpf_funcionario, nome_dependente) /*Adicionando chave prímaria para a tabela*/
 );
+
+-- Adcionando constraint check no atributo sexo
+alter table dependente
+ add constraint check (sexo in ('M', 'F'));
 
 
 -- Criando tabela departamento
@@ -81,59 +93,209 @@ CREATE TABLE localizacoes_departamento (
 
 
 -- Adicionando chave primária na tabela departamento
-ALTER TABLE departamento ADD CONSTRAINT funcionario_departamento_fk
-FOREIGN KEY (cpf_gerente)
+ALTER TABLE departamento 
+ADD FOREIGN KEY (cpf_gerente)
 REFERENCES funcionario (cpf)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION;
+;
 
 -- Adicionando chave primária na tabela depedente
-ALTER TABLE dependente ADD CONSTRAINT funcionario_dependente_fk
-FOREIGN KEY (cpf_funcionario)
+ALTER TABLE dependente 
+ADD FOREIGN KEY (cpf_funcionario)
 REFERENCES funcionario (cpf)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION;
+;
 
 -- Adicionando chave primária na tabela trabalha_em
-ALTER TABLE trabalha_em ADD CONSTRAINT funcionario_trabalha_em_fk
-FOREIGN KEY (cpf_funcionario)
+ALTER TABLE trabalha_em 
+ADD FOREIGN KEY (cpf_funcionario)
 REFERENCES funcionario (cpf)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION;
+;
 
 -- Adicionando chave primária na tabela funcionário
-ALTER TABLE funcionario ADD CONSTRAINT funcionario_funcionario_fk
-FOREIGN KEY (cpf_supervisor)
+ALTER TABLE funcionario 
+ADD FOREIGN KEY (cpf_supervisor)
 REFERENCES funcionario (cpf)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION;
+;
+
 
 -- Adicionando chave primária na tabela localizações_departamento
-ALTER TABLE localizacoes_departamento ADD CONSTRAINT departamento_localizacoes_departamento_fk
-FOREIGN KEY (numero_departamento)
+ALTER TABLE localizacoes_departamento 
+ADD FOREIGN KEY (numero_departamento)
 REFERENCES departamento (numero_departamento)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION;
+;
 
 -- Adicionando chave primária na tabela projeto
-ALTER TABLE projeto ADD CONSTRAINT departamento_projeto_fk
-FOREIGN KEY (numero_departamento)
+ALTER TABLE projeto 
+ADD FOREIGN KEY (numero_departamento)
 REFERENCES departamento (numero_departamento)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION;
+;
 
 -- Adicionando chave primária na tabela trabalha_em
-ALTER TABLE trabalha_em ADD CONSTRAINT projeto_trabalha_em_fk
-FOREIGN KEY (numero_projeto)
+ALTER TABLE trabalha_em 
+ADD FOREIGN KEY (numero_projeto)
 REFERENCES projeto (numero_projeto)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION;
+;
 
-INSERT INTO funcionario VALUES (
-   12345678966, "João", "B", "Silva", '1965-11-09', "Rua das Flores, 751, São Paulo, SP", "M", 30.000, 33344555587, 5 
+-- Inserindo dados na tabela funcionário
+INSERT INTO funcionario VALUES 
+   (
+   "12345678966", "João", "B", "Silva", '1965.11.09', "Rua das Flores, 751, São Paulo, SP", "M", 30.000, 33344555587, 5 
+),
+   (
+   "33344555587", "Fernando", "T", "Wong", '1955-12-08', "Rua da Lapa, 34, São Paulo, SP", "M", 40.000, 33344555587, 5 
+),
+   (
+     "99988777767" , "Alice", "J", "Zelaya", '1968-01-19', "Rua Souza Lima, 35 ,Curitiba< PR", "F", 25.000, 98765432168, 4
+),
+   (
+     "98765432168" , "Jennifer", "S", "Souza", '1941-06-20', "Av.Arthur de Lima, 54, Santo André, SP", "F", 43.000, 88866555576, 4
+),
+   (
+     "66688444476" , "Ronaldo", "K", "Lima", '1962-09-15', "Rua Rebouças, 65, Piracicaba< SP", "M", 38.000, 33344555587, 5 
+),
+   (
+     "45345345376" , "Joice", "A", "Leite", '1972-07-31', "Av.Lucas Obes, 74, São Paulo< SP", "F", 25.000, 33344555587, 5 
+),
+   (
+     "98798798733" , "André", "V", "Pereira", '1969-03-29', "Rua Timbira, 35, São Paulo, SP", "M", 25.000, 98765432168, 4 
+),
+   (
+     "88866555576" , "Jorge", "E", "Brito", '1937-11-10', "Rua do Horto, 35, São Paulo, SP ", "M", 55.000, NULL, 1 
 );
 
-INSERT INTO funcionario VALUES (
-   33344555587, "Fernando", "T", "Wong", '1955-12-08', "Rua da Lapa, 34, São Paulo, SP", "M", 40.000, 33344555587, 5 
+
+-- Inserindo dados na tabela departamento
+INSERT INTO departamento VALUES (
+      5, "Pesquisa", "33344555587", '1988-05-22'
+),
+   (
+       4, "Administração", "98765432168", '1995-01-01'
+),
+   (
+       1, "Matriz", "88866555576", '1981-06-19'
 );
+
+-- Inserindo dados na tabela localizações_departamento
+INSERT INTO localizacoes_departamento VALUES (
+       1, "São Paulo"
+),
+   (
+       4, "Mauá"
+),
+   (
+       5, "Santo André"
+),
+   (
+       5, "Itu"
+),
+   (
+       5, "São Paulo"
+);
+
+-- Inserindo dados na tabela projeto
+INSERT INTO projeto VALUES (
+       1, "ProdutoX", "Santo André", 5 
+),
+   (
+       2, "ProdutoY", "Itu", 5 
+),
+   (
+       3, "ProdutoZ", "São Paulo", 5
+),
+   (
+       10, "Informatização", "Mauá", 4
+),
+   (
+       20, "Reotganização", "São Paulo", 1
+),
+   (
+       30, "Novosbenefícios", "Mauá", 4
+);
+
+-- Inserindo dados na tabela dependente
+INSERT INTO dependente VALUES (
+       "33344555587", "Alicia", "F", '1986-04-05', "Filha"
+),
+   (
+       "33344555587", "Tiago", "M", '1983-10-25', "Filho"
+),
+   (
+       "33344555587", "Janaína", "F", '1958-05-03', "Esposa"
+),
+   (
+       "98765432168", "Antonio", "M", '1942-02-18', "Marido"
+),
+   (
+       "12345678966", "Michael", "M", '1988-01-04', "Filho"
+),
+   (
+       "12345678966", "Alicia", "F", '1988-12-30', "Filha"
+),
+   (
+       "12345678966", "Elizabeth", "F", '1967-05-05', "Esposa"
+);
+
+
+-- Inserindo dados na tabela trbalha_em
+INSERT INTO trabalha_em VALUES (
+       "12345678966", 1, 32.5
+),
+   (
+       "12345678966", 2, 7.5
+),
+   (
+       "66688444476", 3, 40.0
+),
+   (
+       "45345345376", 1, 20.0
+),
+   (
+       "45345345376", 2, 20.0
+),
+   (
+       "33344555587", 2, 10.0
+),
+   (
+       "33344555587", 3, 10.0
+),
+   (
+       "33344555587", 10, 10.0
+),
+   (
+       "33344555587", 20, 10.0
+),
+   (
+       "99988777767", 30, 30.0
+),
+   (
+       "99988777767", 10, 10.0
+),
+   (
+       "98798798733", 10, 35.0
+),
+   (
+       "98798798733", 30, 5.0
+),
+   (
+       "98765432168", 30, 20.0
+),
+   (
+       "98765432168", 20, 15.0
+),
+   (
+       "88866555576", 20, 
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
