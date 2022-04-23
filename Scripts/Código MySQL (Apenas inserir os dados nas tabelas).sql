@@ -138,17 +138,20 @@ REFERENCES projeto (numero_projeto)
 -- Inserindo dados na tabela funcionário
 INSERT INTO funcionario VALUES 
    (
-   "12345678966", "João", "B", "Silva", '1965.11.09', "Rua das Flores, 751, São Paulo, SP", "M", 30.000, 33344555587, 5 
-),
-   (
    "33344555587", "Fernando", "T", "Wong", '1955-12-08', "Rua da Lapa, 34, São Paulo, SP", "M", 40.000, 33344555587, 5 
 ),
    (
-     "99988777767" , "Alice", "J", "Zelaya", '1968-01-19', "Rua Souza Lima, 35 ,Curitiba< PR", "F", 25.000, 98765432168, 4
+     "88866555576" , "Jorge", "E", "Brito", '1937-11-10', "Rua do Horto, 35, São Paulo, SP ", "M", 55.000, NULL, 1 
 ),
    (
+   "12345678966", "João", "B", "Silva", '1965.11.09', "Rua das Flores, 751, São Paulo, SP", "M", 30.000, 33344555587, 5 
+), 
+   (
      "98765432168" , "Jennifer", "S", "Souza", '1941-06-20', "Av.Arthur de Lima, 54, Santo André, SP", "F", 43.000, 88866555576, 4
-),
+), 
+   (
+     "99988777767" , "Alice", "J", "Zelaya", '1968-01-19', "Rua Souza Lima, 35 ,Curitiba< PR", "F", 25.000, 98765432168, 4
+),   
    (
      "66688444476" , "Ronaldo", "K", "Lima", '1962-09-15', "Rua Rebouças, 65, Piracicaba< SP", "M", 38.000, 33344555587, 5 
 ),
@@ -157,9 +160,6 @@ INSERT INTO funcionario VALUES
 ),
    (
      "98798798733" , "André", "V", "Pereira", '1969-03-29', "Rua Timbira, 35, São Paulo, SP", "M", 25.000, 98765432168, 4 
-),
-   (
-     "88866555576" , "Jorge", "E", "Brito", '1937-11-10', "Rua do Horto, 35, São Paulo, SP ", "M", 55.000, NULL, 1 
 );
 
 
@@ -282,7 +282,7 @@ INSERT INTO trabalha_em VALUES (
        "98765432168", 20, 15.0
 ),
    (
-       "88866555576", 20, 
+       "88866555576", 20, NULL
 );
 
 
