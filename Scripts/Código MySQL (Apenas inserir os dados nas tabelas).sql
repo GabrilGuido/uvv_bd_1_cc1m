@@ -79,7 +79,7 @@ CREATE UNIQUE INDEX projeto_idx
 CREATE TABLE trabalha_em (
                 cpf_funcionario CHAR(11) NOT NULL /*CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.*/,
                 numero_projeto INT NOT NULL /*Número do projeto. Faz parte da PK desta tabela e é uma FK para a tabela projeto.*/,
-                horas DECIMAL(3,1) NOT NULL /*Horas trabalhadas pelo funcionário neste projeto.*/,
+                horas DECIMAL(3,1) /*Horas trabalhadas pelo funcionário neste projeto.*/,
                 PRIMARY KEY (cpf_funcionario, numero_projeto) /*Adicionando chaves prímarias para a tabela*/
 );
 
