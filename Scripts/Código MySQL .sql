@@ -6,7 +6,7 @@ CREATE DATABASE uvv;
 
 USE uvv;
 
--- Criandot tabela funcionário
+-- Criando tabela funcionário
 CREATE TABLE funcionario (
                 cpf CHAR(11) NOT NULL /*CPF do funcionário. Será a PK da tabela.*/,
                 primeiro_nome VARCHAR(15) NOT NULL /*Primeiro nome do funcionário.*/,
@@ -16,7 +16,7 @@ CREATE TABLE funcionario (
                 endereco VARCHAR(150) /*Endereço do funcionário.*/,
                 sexo CHAR(1) /*Sexo do funcionário.*/,
                 salario DECIMAL(10,2) /*Salário do funcionário.*/,
-                cpf_supervisor CHAR(11)  /*CPF do supervisor. Será uma FK para a própria tabela.*/,
+                cpf_supervisor CHAR(11) NOT NULL /*CPF do supervisor. Será uma FK para a própria tabela.*/,
                 numero_departamento INT NOT NULL /*Número do departamento do funcionário.*/,
                 PRIMARY KEY (cpf) /*Adicionando chave prímaria para a tabela*/
 );
@@ -30,7 +30,7 @@ ALTER TABLE funcionario MODIFY COLUMN nome_meio CHAR(1) COMMENT 'Inicial do nome
 
 ALTER TABLE funcionario MODIFY COLUMN ultimo_nome VARCHAR(15) COMMENT 'Sobrenome do funcionário.';
 
-ALTER TABLE funcionario MODIFY COLUMN endereco VARCHAR(30) COMMENT 'Endereço do funcionário.';
+ALTER TABLE funcionario MODIFY COLUMN endereco VARCHAR(150) COMMENT 'Endereço do funcionário.';
 
 ALTER TABLE funcionario MODIFY COLUMN sexo CHAR(1) COMMENT 'Sexo do funcionário.';
 
@@ -154,48 +154,49 @@ ALTER TABLE localizacoes_departamento MODIFY COLUMN numero_departamento INTEGER 
 ALTER TABLE localizacoes_departamento MODIFY COLUMN local VARCHAR(15) COMMENT 'Localização do departamento. Faz parte da PK desta tabela.';
 
 
--- Adicionando chave primária na tabela departamento
+-- Adicionando chave estrangeira na tabela departamento
 ALTER TABLE departamento 
 ADD FOREIGN KEY (cpf_gerente)
 REFERENCES funcionario (cpf)
 ;
 
--- Adicionando chave primária na tabela depedente
+-- Adicionando chave estrangeira na tabela depedente
 ALTER TABLE dependente 
 ADD FOREIGN KEY (cpf_funcionario)
 REFERENCES funcionario (cpf)
 ;
 
--- Adicionando chave primária na tabela trabalha_em
+-- Adicionando chave estrangeira na tabela trabalha_em
 ALTER TABLE trabalha_em 
 ADD FOREIGN KEY (cpf_funcionario)
 REFERENCES funcionario (cpf)
 ;
 
--- Adicionando chave primária na tabela funcionário
+-- Adicionando chave estrangeira na tabela funcionário
 ALTER TABLE funcionario 
 ADD FOREIGN KEY (cpf_supervisor)
 REFERENCES funcionario (cpf)
 ;
 
 
--- Adicionando chave primária na tabela localizações_departamento
+-- Adicionando chave estrangeira na tabela localizações_departamento
 ALTER TABLE localizacoes_departamento 
 ADD FOREIGN KEY (numero_departamento)
 REFERENCES departamento (numero_departamento)
 ;
 
--- Adicionando chave primária na tabela projeto
+-- Adicionando chave estrangeira na tabela projeto
 ALTER TABLE projeto 
 ADD FOREIGN KEY (numero_departamento)
 REFERENCES departamento (numero_departamento)
 ;
 
--- Adicionando chave primária na tabela trabalha_em
+-- Adicionando chave estrangeira na tabela trabalha_em
 ALTER TABLE trabalha_em 
 ADD FOREIGN KEY (numero_projeto)
 REFERENCES projeto (numero_projeto)
 ;
+
 
 -- Inserindo dados na tabela funcionário
 INSERT INTO funcionario VALUES 
@@ -203,7 +204,7 @@ INSERT INTO funcionario VALUES
    "33344555587", "Fernando", "T", "Wong", '1955-12-08', "Rua da Lapa, 34, São Paulo, SP", "M", 40.000, 33344555587, 5 
 ),
    (
-     "88866555576" , "Jorge", "E", "Brito", '1937-11-10', "Rua do Horto, 35, São Paulo, SP ", "M", 55.000, NULL, 1 
+     "88866555576" , "Jorge", "E", "Brito", '1937-11-10', "Rua do Horto, 35, São Paulo, SP ", "M", 55.000, 88866555576, 1 
 ),
    (
    "12345678966", "João", "B", "Silva", '1965.11.09', "Rua das Flores, 751, São Paulo, SP", "M", 30.000, 33344555587, 5 
@@ -215,15 +216,14 @@ INSERT INTO funcionario VALUES
      "99988777767" , "Alice", "J", "Zelaya", '1968-01-19', "Rua Souza Lima, 35 ,Curitiba< PR", "F", 25.000, 98765432168, 4
 ),   
    (
-     "66688444476" , "Ronaldo", "K", "Lima", '1962-09-15', "Rua Rebouças, 65, Piracicaba< SP", "M", 38.000, 33344555587, 5 
+     "66688444476" , "Ronaldo", "K", "Lima", '1962-09-15', "Rua Rebouças, 65, Piracicaba, SP", "M", 38.000, 33344555587, 5 
 ),
    (
-     "45345345376" , "Joice", "A", "Leite", '1972-07-31', "Av.Lucas Obes, 74, São Paulo< SP", "F", 25.000, 33344555587, 5 
+     "45345345376" , "Joice", "A", "Leite", '1972-07-31', "Av.Lucas Obes, 74, São Paulo, SP", "F", 25.000, 33344555587, 5 
 ),
    (
      "98798798733" , "André", "V", "Pereira", '1969-03-29', "Rua Timbira, 35, São Paulo, SP", "M", 25.000, 98765432168, 4 
 );
-
 
 -- Inserindo dados na tabela departamento
 INSERT INTO departamento VALUES (
@@ -235,6 +235,7 @@ INSERT INTO departamento VALUES (
    (
        1, "Matriz", "88866555576", '1981-06-19'
 );
+
 
 -- Inserindo dados na tabela localizações_departamento
 INSERT INTO localizacoes_departamento VALUES (

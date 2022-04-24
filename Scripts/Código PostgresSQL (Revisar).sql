@@ -22,10 +22,10 @@ CREATE TABLE elmasri.funcionario (
                 nome_meio CHAR(1) /*Inicial do nome do meio.*/,
                 ultimo_nome VARCHAR(15) NOT NULL /*Sobrenome do funcionário.*/,
                 data_nascimento DATE /*Nascimento do fucionário*/,
-                endereco VARCHAR(30) /*Endereço do funcionário.*/,
+                endereco VARCHAR(150) /*Endereço do funcionário.*/,
                 sexo CHAR(1) /*Sexo do funcionário.*/,
                 salario NUMERIC(10,2) /*Salário do funcionário.*/,
-                cpf_supervisor CHAR(11) /*CPF do supervisor. É uma FK para a própria tabela.*/,
+                cpf_supervisor CHAR(11) NOT NULL /*CPF do supervisor. É uma FK para a própria tabela.*/,
                 numero_departamento INTEGER NOT NULL /*Número do departamento do funcionário.*/,
                 CONSTRAINT pk_funcionario PRIMARY KEY (cpf)/*Adicionando as chaves primárias da tabela*/
 );
@@ -166,6 +166,12 @@ FOREIGN KEY (cpf_supervisor)
 REFERENCES elmasri.funcionario (cpf)
 NOT DEFERRABLE;
 
+--Adicionando chave estrangeira na tabela funcionário
+ALTER TABLE elmasri.funcionario 
+FOREIGN KEY (numero_departamento)
+REFERENCES elmasri.departamento (numero_departamento);
+
+
 --Adicionando chave estrangeira na tabela localizações_departamento
 ALTER TABLE elmasri.localizacoes_departamento ADD  departamento_localizacoes_departamento_fk
 FOREIGN KEY (numero_departamento)
@@ -185,55 +191,55 @@ REFERENCES elmasri.projeto (numero_projeto)
 NOT DEFERRABLE;
 
 -- Adicionando chave primária na tabela departamento
-ALTER TABLE departamento 
+ALTER TABLE elmasri.departamento 
 ADD FOREIGN KEY (cpf_gerente)
-REFERENCES funcionario (cpf)
+REFERENCES elmasri.funcionario (cpf)
 ;
 
 -- Adicionando chave primária na tabela depedente
-ALTER TABLE dependente 
+ALTER TABLE elmasri.dependente 
 ADD FOREIGN KEY (cpf_funcionario)
-REFERENCES funcionario (cpf)
+REFERENCES elmasri.funcionario (cpf)
 ;
 
 -- Adicionando chave primária na tabela trabalha_em
-ALTER TABLE trabalha_em 
+ALTER TABLE elmasri.trabalha_em 
 ADD FOREIGN KEY (cpf_funcionario)
-REFERENCES funcionario (cpf)
+REFERENCES elmasri.funcionario (cpf)
 ;
 
 -- Adicionando chave primária na tabela funcionário
-ALTER TABLE funcionario 
+ALTER TABLE elmasri.funcionario 
 ADD FOREIGN KEY (cpf_supervisor)
-REFERENCES funcionario (cpf)
+REFERENCES elmasri.funcionario (cpf)
 ;
 
 
 -- Adicionando chave primária na tabela localizações_departamento
-ALTER TABLE localizacoes_departamento 
+ALTER TABLE elmasri.localizacoes_departamento 
 ADD FOREIGN KEY (numero_departamento)
-REFERENCES departamento (numero_departamento)
+REFERENCES elmasri.departamento (numero_departamento)
 ;
 
 -- Adicionando chave primária na tabela projeto
-ALTER TABLE projeto 
+ALTER TABLE elmasri.projeto 
 ADD FOREIGN KEY (numero_departamento)
-REFERENCES departamento (numero_departamento)
+REFERENCES elmasri.departamento (numero_departamento)
 ;
 
 -- Adicionando chave primária na tabela trabalha_em
-ALTER TABLE trabalha_em 
+ALTER TABLE elmasri.trabalha_em 
 ADD FOREIGN KEY (numero_projeto)
-REFERENCES projeto (numero_projeto)
+REFERENCES elmasri.projeto (numero_projeto)
 ;
 
 -- Inserindo dados na tabela funcionário
-INSERT INTO funcionario VALUES 
+INSERT INTO elmasri.funcionario VALUES 
    (
    "33344555587", "Fernando", "T", "Wong", '1955-12-08', "Rua da Lapa, 34, São Paulo, SP", "M", 40.000, 33344555587, 5 
 ),
    (
-     "88866555576" , "Jorge", "E", "Brito", '1937-11-10', "Rua do Horto, 35, São Paulo, SP ", "M", 55.000, NULL, 1 
+     "88866555576" , "Jorge", "E", "Brito", '1937-11-10', "Rua do Horto, 35, São Paulo, SP ", "M", 55.000, 8886655557, 1 
 ),
    (
    "12345678966", "João", "B", "Silva", '1965.11.09', "Rua das Flores, 751, São Paulo, SP", "M", 30.000, 33344555587, 5 
@@ -242,13 +248,13 @@ INSERT INTO funcionario VALUES
      "98765432168" , "Jennifer", "S", "Souza", '1941-06-20', "Av.Arthur de Lima, 54, Santo André, SP", "F", 43.000, 88866555576, 4
 ), 
    (
-     "99988777767" , "Alice", "J", "Zelaya", '1968-01-19', "Rua Souza Lima, 35 ,Curitiba< PR", "F", 25.000, 98765432168, 4
+     "99988777767" , "Alice", "J", "Zelaya", '1968-01-19', "Rua Souza Lima, 35 ,Curitiba, PR", "F", 25.000, 98765432168, 4
 ),   
    (
-     "66688444476" , "Ronaldo", "K", "Lima", '1962-09-15', "Rua Rebouças, 65, Piracicaba< SP", "M", 38.000, 33344555587, 5 
+     "66688444476" , "Ronaldo", "K", "Lima", '1962-09-15', "Rua Rebouças, 65, Piracicaba, SP", "M", 38.000, 33344555587, 5 
 ),
    (
-     "45345345376" , "Joice", "A", "Leite", '1972-07-31', "Av.Lucas Obes, 74, São Paulo< SP", "F", 25.000, 33344555587, 5 
+     "45345345376" , "Joice", "A", "Leite", '1972-07-31', "Av.Lucas Obes, 74, São Paulo, SP", "F", 25.000, 33344555587, 5 
 ),
    (
      "98798798733" , "André", "V", "Pereira", '1969-03-29', "Rua Timbira, 35, São Paulo, SP", "M", 25.000, 98765432168, 4 
@@ -256,7 +262,7 @@ INSERT INTO funcionario VALUES
 
 
 -- Inserindo dados na tabela departamento
-INSERT INTO departamento VALUES (
+INSERT INTO elmasri.departamento VALUES (
       5, "Pesquisa", "33344555587", '1988-05-22'
 ),
    (
@@ -267,7 +273,7 @@ INSERT INTO departamento VALUES (
 );
 
 -- Inserindo dados na tabela localizações_departamento
-INSERT INTO localizacoes_departamento VALUES (
+INSERT INTO elmasri.localizacoes_departamento VALUES (
        1, "São Paulo"
 ),
    (
@@ -284,7 +290,7 @@ INSERT INTO localizacoes_departamento VALUES (
 );
 
 -- Inserindo dados na tabela projeto
-INSERT INTO projeto VALUES (
+INSERT INTO elmasri.projeto VALUES (
        1, "ProdutoX", "Santo André", 5 
 ),
    (
@@ -304,7 +310,7 @@ INSERT INTO projeto VALUES (
 );
 
 -- Inserindo dados na tabela dependente
-INSERT INTO dependente VALUES (
+INSERT INTO elmasri.dependente VALUES (
        "33344555587", "Alicia", "F", '1986-04-05', "Filha"
 ),
    (
@@ -328,7 +334,7 @@ INSERT INTO dependente VALUES (
 
 
 -- Inserindo dados na tabela trbalha_em
-INSERT INTO trabalha_em VALUES (
+INSERT INTO elmasri.trabalha_em VALUES (
        "12345678966", 1, 32.5
 ),
    (
