@@ -21,6 +21,26 @@ CREATE TABLE funcionario (
                 PRIMARY KEY (cpf) /*Adicionando chave prímaria para a tabela*/
 );
 
+-- Adicionando comentários nas colunas da tabela
+ALTER TABLE funcionario MODIFY COLUMN cpf CHAR(11) COMMENT 'CPF do funcionário. Será a PK da tabela.';
+
+ALTER TABLE funcionario MODIFY COLUMN primeiro_nome VARCHAR(15) COMMENT 'Primeiro nome do funcionário.';
+
+ALTER TABLE funcionario MODIFY COLUMN nome_meio CHAR(1) COMMENT 'Inicial do nome do meio.';
+
+ALTER TABLE funcionario MODIFY COLUMN ultimo_nome VARCHAR(15) COMMENT 'Sobrenome do funcionário.';
+
+ALTER TABLE funcionario MODIFY COLUMN endereco VARCHAR(30) COMMENT 'Endereço do funcionário.';
+
+ALTER TABLE funcionario MODIFY COLUMN sexo CHAR(1) COMMENT 'Sexo do funcionário.';
+
+ALTER TABLE funcionario MODIFY COLUMN salario DECIMAL(10, 2) COMMENT 'Salário do funcionário.';
+
+ALTER TABLE funcionario MODIFY COLUMN cpf_supervisor CHAR(11) COMMENT 'CPF do supervisor. Será uma FK para a própria tabela.';
+
+ALTER TABLE funcionario MODIFY COLUMN numero_departamento INTEGER COMMENT 'Número do departamento do funcionário.';
+
+
 -- Adcionando constraint check no atributo sexo
 alter table funcionario
  add constraint check (sexo in ('M', 'F'));
@@ -40,6 +60,18 @@ CREATE TABLE dependente (
                 PRIMARY KEY (cpf_funcionario, nome_dependente) /*Adicionando chave prímaria para a tabela*/
 );
 
+-- Adicionando comentários nas colunas da tabela
+ALTER TABLE dependente MODIFY COLUMN cpf_funcionario CHAR(11) COMMENT 'CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.';
+
+ALTER TABLE dependente MODIFY COLUMN nome_dependente VARCHAR(15) COMMENT 'Nome do dependente. Faz parte da PK desta tabela.';
+
+ALTER TABLE dependente MODIFY COLUMN sexo CHAR(1) COMMENT 'Sexo do dependente.';
+
+ALTER TABLE dependente MODIFY COLUMN data_nascimento DATE COMMENT 'Data de nascimento do dependente.';
+
+ALTER TABLE dependente MODIFY COLUMN parentesco VARCHAR(15) COMMENT 'Descrição do parentesco do dependente com o funcionário.';
+
+
 -- Adcionando constraint check no atributo sexo
 alter table dependente
  add constraint check (sexo in ('M', 'F'));
@@ -53,6 +85,15 @@ CREATE TABLE departamento (
                 data_inicio_gerente DATE /*Data do início do gerente no departamento.*/,
                 PRIMARY KEY (numero_departamento) /*Adicionando chave prímaria para a tabela*/
 );
+
+-- Adicionando comentários nas colunas da tabela
+ALTER TABLE departamento MODIFY COLUMN numero_departamento INTEGER COMMENT 'Número do departamento. É a PK desta tabela.';
+
+ALTER TABLE departamento MODIFY COLUMN nome_departamento VARCHAR(15) COMMENT 'Nome do departamento. Deve ser único.';
+
+ALTER TABLE departamento MODIFY COLUMN cpf_gerente CHAR(11) COMMENT 'CPF do gerente do departamento. FK para a tabela funcionários.';
+
+ALTER TABLE departamento MODIFY COLUMN data_inicio_gerente DATE COMMENT 'Data do início do gerente no departamento.';
 
 
 -- Criando chave alternativa
@@ -69,6 +110,15 @@ CREATE TABLE projeto (
                 PRIMARY KEY (numero_projeto) /*Adicionando chave prímaria para a tabela*/
 );
 
+-- Adicionando comentários nas colunas da tabela
+ALTER TABLE projeto MODIFY COLUMN numero_projeto INTEGER COMMENT 'Número do projeto. É a PK desta tabela.';
+
+ALTER TABLE projeto MODIFY COLUMN nome_projeto VARCHAR(15) COMMENT 'Nome do projeto. Deve ser único.';
+
+ALTER TABLE projeto MODIFY COLUMN local_projeto VARCHAR(15) COMMENT 'Localização do projeto.';
+
+ALTER TABLE projeto MODIFY COLUMN numero_departamento INTEGER COMMENT 'Número do departamento. É uma FK para a tabela departamento.';
+
 
 -- Criando chave alternativa
 CREATE UNIQUE INDEX projeto_idx
@@ -83,6 +133,13 @@ CREATE TABLE trabalha_em (
                 PRIMARY KEY (cpf_funcionario, numero_projeto) /*Adicionando chaves prímarias para a tabela*/
 );
 
+-- Adicionando comentários nas colunas da tabela
+ALTER TABLE trabalha_em MODIFY COLUMN cpf_funcionario CHAR(11) COMMENT 'CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.';
+
+ALTER TABLE trabalha_em MODIFY COLUMN numero_projeto INTEGER COMMENT 'Número do projeto. Faz parte da PK desta tabela e é uma FK para a tabela projeto.';
+
+ALTER TABLE trabalha_em MODIFY COLUMN horas DECIMAL(3, 1) COMMENT 'Horas trabalhadas pelo funcionário neste projeto.';
+
 
 -- Criando tabela localizacoes_departamento
 CREATE TABLE localizacoes_departamento (
@@ -90,6 +147,11 @@ CREATE TABLE localizacoes_departamento (
                 local VARCHAR(15) NOT NULL /*Localização do departamento. Faz parte da PK desta tabela.*/,
                 PRIMARY KEY (numero_departamento, local) /*Adicionando chaves prímarias para a tabela*/
 );
+
+-- Adicionando comentários nas colunas da tabela
+ALTER TABLE localizacoes_departamento MODIFY COLUMN numero_departamento INTEGER COMMENT 'Número do departamento. Faz parta da PK desta tabela e também é uma FK para a tabela departamento.';
+
+ALTER TABLE localizacoes_departamento MODIFY COLUMN local VARCHAR(15) COMMENT 'Localização do departamento. Faz parte da PK desta tabela.';
 
 
 -- Adicionando chave primária na tabela departamento

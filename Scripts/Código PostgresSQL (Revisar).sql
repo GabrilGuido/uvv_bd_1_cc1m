@@ -30,6 +30,18 @@ CREATE TABLE elmasri.funcionario (
                 CONSTRAINT pk_funcionario PRIMARY KEY (cpf)/*Adicionando as chaves primárias da tabela*/
 );
 
+-- Adicionando comentários nas colunas da tabela
+COMMENT ON COLUMN elmasri.funcionario.cpf IS 'CPF do funcionário. Será a PK da tabela.';
+COMMENT ON COLUMN elmasri.funcionario.primeiro_nome IS 'Primeiro nome do funcionário.';
+COMMENT ON COLUMN elmasri.funcionario.nome_meio IS 'Inicial do nome do meio.';
+COMMENT ON COLUMN elmasri.funcionario.ultimo_nome IS 'Sobrenome do funcionário.';
+COMMENT ON COLUMN elmasri.funcionario.endereco IS 'Endereço do funcionário.';
+COMMENT ON COLUMN elmasri.funcionario.sexo IS 'Sexo do funcionário.';
+COMMENT ON COLUMN elmasri.funcionario.salario IS 'Salário do funcionário.';
+COMMENT ON COLUMN elmasri.funcionario.cpf_supervisor IS 'CPF do supervisor. Será uma FK para a própria tabela.';
+COMMENT ON COLUMN elmasri.funcionario.numero_departamento IS 'Número do departamento do funcionário.';
+
+
 -- Adcionando constraint check no atributo sexo
 alter table elmasri.funcionario
  add constraint check (sexo in ('M', 'F'));
@@ -50,6 +62,14 @@ CREATE TABLE elmasri.dependente (
                 CONSTRAINT pk_dependente PRIMARY KEY (cpf_funcionario, nome_dependente)/*Adicionando as chaves primárias da tabela*/
 );
 
+-- Adicionando comentários nas colunas da tabela
+COMMENT ON COLUMN elmasri.dependente.cpf_funcionario IS 'CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.';
+COMMENT ON COLUMN elmasri.dependente.nome_dependente IS 'Nome do dependente. Faz parte da PK desta tabela.';
+COMMENT ON COLUMN elmasri.dependente.sexo IS 'Sexo do dependente.';
+COMMENT ON COLUMN elmasri.dependente.data_nascimento IS 'Data de nascimento do dependente.';
+COMMENT ON COLUMN elmasri.dependente.parentesco IS 'Descrição do parentesco do dependente com o funcionário.';
+
+
 -- Adcionando constraint check no atributo sexo
 alter table elmasri.dependente
  add constraint check (sexo in ('M', 'F'));
@@ -62,6 +82,13 @@ CREATE TABLE elmasri.departamento (
                 data_inicio_gerente DATE /*Data do início do gerente no departamento.*/,
                 CONSTRAINT pk_departamento PRIMARY KEY (numero_departamento)/*Adicionando as chaves primárias da tabela*/
 );
+
+-- Adicionando comentários nas colunas da tabela
+COMMENT ON COLUMN elmasri.departamento.numero_departamento IS 'Número do departamento. É a PK desta tabela.';
+COMMENT ON COLUMN elmasri.departamento.nome_departamento IS 'Nome do departamento. Deve ser único.';
+COMMENT ON COLUMN elmasri.departamento.cpf_gerente IS 'CPF do gerente do departamento. FK para a tabela funcionários.';
+COMMENT ON COLUMN elmasri.departamento.data_inicio_gerente IS 'Data do início do gerente no departamento.';
+
 
 --Criando uma chave alternativa
 CREATE UNIQUE INDEX departamento_idx
@@ -77,6 +104,13 @@ CREATE TABLE elmasri.projeto (
                 CONSTRAINT pk_projeto PRIMARY KEY (numero_projeto) /*Adicionando a chave primária da tabela*/
 );
 
+-- Adicionando comentários nas colunas da tabela
+COMMENT ON COLUMN elmasri.projeto.numero_projeto IS 'Número do projeto. É a PK desta tabela.';
+COMMENT ON COLUMN elmasri.projeto.nome_projeto IS 'Nome do projeto. Deve ser único.';
+COMMENT ON COLUMN elmasri.projeto.local_projeto IS 'Localização do projeto.';
+COMMENT ON COLUMN elmasri.projeto.numero_departamento IS 'Número do departamento. É uma FK para a tabela departamento.';
+
+
 --Criando uma chave alternativa
 CREATE UNIQUE INDEX projeto_idx
  ON elmasri.projeto
@@ -90,6 +124,11 @@ CREATE TABLE elmasri.trabalha_em (
                 CONSTRAINT pk_trabalha_em PRIMARY KEY (cpf_funcionario, numero_projeto) /*Adicionando a chave primária da tabela*/
 );
 
+-- Adicionando comentários nas colunas da tabela
+COMMENT ON COLUMN elmasri.trabalha_em.cpf_funcionario IS 'CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.';
+COMMENT ON COLUMN elmasri.trabalha_em.numero_projeto IS 'Número do projeto. Faz parte da PK desta tabela e é uma FK para a tabela projeto.';
+COMMENT ON COLUMN elmasri.trabalha_em.horas IS 'Horas trabalhadas pelo funcionário neste projeto.';
+
 
 --Criando a tabela da localização do departamento onde o funcionário trabalha
 CREATE TABLE elmasri.localizacoes_departamento (
@@ -97,6 +136,11 @@ CREATE TABLE elmasri.localizacoes_departamento (
                 local VARCHAR(15) NOT NULL /*Localização do departamento. Faz parte da PK desta tabela.*/,
                 CONSTRAINT pk_localizacoes_departamento PRIMARY KEY (numero_departamento, local) /*Adicionando a chave primária da tabela*/
 );
+
+-- Adicionando comentários nas colunas da tabela
+COMMENT ON COLUMN elmasri.localizacoes_departamento.numero_departamento IS 'Número do departamento. Faz parta da PK desta tabela e também é uma FK para a tabela departamento.';
+COMMENT ON COLUMN elmasri.localizacoes_departamento.local IS 'Localização do departamento. Faz parte da PK desta tabela.';
+
 
 --Adicionando chave estrangeira na tabela departamento
 ALTER TABLE elmasri.departamento ADD 
