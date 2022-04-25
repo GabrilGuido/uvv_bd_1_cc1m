@@ -1,7 +1,19 @@
-CREATE ROLE gabrielguido SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD '1337'
+--Entrar com o login do usuário postgres
+su - postgres
+--digitar a senha do usuário postgres: postgres
 
-CREATE SCHEMA elmasri;
+--Criando o usuário gabrielguido 
+createuser gabrielguido -dPs
+--digitar senha: 123456
+--confirmar senha: 123456
+--digitar senha administrativa do BD: computacao@raiz
 
+--Entrando no postgres
+psql
+--digitar senha administrativa do BD: computacao@raiz
+
+
+--Criando database UVV
 CREATE DATABASE uvv
 with
 OWNER = gabrielguido
@@ -12,6 +24,16 @@ LC_CTYPE = 'pt_BR.UTF-8'
 ALLOW_CONNECTIONS = true
 ;
 
+--Conectando o usuário gabrielguido ao BD 
+\connect uvv gabrielguido;
+--digitar senha do usuário gabrielguido: 123456
+
+--Criando esquema elmasri
+create schema elmasri authorization gabrielguido;
+
+--Botando o esquema elmasri como padrão
+alter user gabrielguido
+set search_path to elmasri, "$user", public;
 
 
 --Criando tabela funcionários
@@ -27,7 +49,7 @@ CREATE TABLE elmasri.funcionario (
                 salario NUMERIC(10,2) /*Salário do funcionário.*/,
                 cpf_supervisor CHAR(11) NOT NULL /*CPF do supervisor. É uma FK para a própria tabela.*/,
                 numero_departamento INTEGER NOT NULL /*Número do departamento do funcionário.*/,
-                CONSTRAINT pk_funcionario PRIMARY KEY (cpf)/*Adicionando as chaves primárias da tabela*/
+                CONSTRAINT pk_funcionario PRIMARY KEY (cpf, numero_departamento)/*Adicionando as chaves primárias da tabela*/
 );
 
 -- Adicionando comentários nas colunas da tabela
@@ -120,7 +142,7 @@ CREATE UNIQUE INDEX projeto_idx
 CREATE TABLE elmasri.trabalha_em (
                 cpf_funcionario CHAR(11) NOT NULL /*CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.*/,
                 numero_projeto INTEGER NOT NULL /*Número do projeto. Faz parte da PK desta tabela e é uma FK para a tabela projeto.*/,
-                horas NUMERIC(3,1) /*Horas trabalhadas pelo funcionário neste projeto.*/ ,
+                horas NUMERIC(3,1) NOT NULL /*Horas trabalhadas pelo funcionário neste projeto.*/ ,
                 CONSTRAINT pk_trabalha_em PRIMARY KEY (cpf_funcionario, numero_projeto) /*Adicionando a chave primária da tabela*/
 );
 
@@ -128,6 +150,7 @@ CREATE TABLE elmasri.trabalha_em (
 COMMENT ON COLUMN elmasri.trabalha_em.cpf_funcionario IS 'CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.';
 COMMENT ON COLUMN elmasri.trabalha_em.numero_projeto IS 'Número do projeto. Faz parte da PK desta tabela e é uma FK para a tabela projeto.';
 COMMENT ON COLUMN elmasri.trabalha_em.horas IS 'Horas trabalhadas pelo funcionário neste projeto.';
+
 
 
 --Criando a tabela da localização do departamento onde o funcionário trabalha
@@ -142,96 +165,56 @@ COMMENT ON COLUMN elmasri.localizacoes_departamento.numero_departamento IS 'Núm
 COMMENT ON COLUMN elmasri.localizacoes_departamento.local IS 'Localização do departamento. Faz parte da PK desta tabela.';
 
 
---Adicionando chave estrangeira na tabela departamento
-ALTER TABLE elmasri.departamento ADD 
-FOREIGN KEY (cpf_gerente)
-REFERENCES elmasri.funcionario (cpf)
-NOT DEFERRABLE;
-
---Adicionando chave estrangeira na tabela dependente
-ALTER TABLE elmasri.dependente ADD 
-FOREIGN KEY (cpf_funcionario)
-REFERENCES elmasri.funcionario (cpf)
-NOT DEFERRABLE;
-
---Adicionando chave estrangeira na tabela trbalha_em
-ALTER TABLE elmasri.trabalha_em ADD 
-FOREIGN KEY (cpf_funcionario)
-REFERENCES elmasri.funcionario (cpf)
-NOT DEFERRABLE;
-
---Adicionando chave estrangeira na tabela funcionário
-ALTER TABLE elmasri.funcionario ADD 
-FOREIGN KEY (cpf_supervisor)
-REFERENCES elmasri.funcionario (cpf)
-NOT DEFERRABLE;
-
---Adicionando chave estrangeira na tabela funcionário
-ALTER TABLE elmasri.funcionario 
-FOREIGN KEY (numero_departamento)
-REFERENCES elmasri.departamento (numero_departamento);
-
-
---Adicionando chave estrangeira na tabela localizações_departamento
-ALTER TABLE elmasri.localizacoes_departamento ADD  departamento_localizacoes_departamento_fk
-FOREIGN KEY (numero_departamento)
-REFERENCES elmasri.departamento (numero_departamento)
-NOT DEFERRABLE;
-
---Adicionando chave estrangeira na tabela projeto
-ALTER TABLE elmasri.projeto ADD 
-FOREIGN KEY (numero_departamento)
-REFERENCES elmasri.departamento (numero_departamento)
-NOT DEFERRABLE;
-
---Adicionando chave estrangeira na tabela trbalha_em
-ALTER TABLE elmasri.trabalha_em ADD 
-FOREIGN KEY (numero_projeto)
-REFERENCES elmasri.projeto (numero_projeto)
-NOT DEFERRABLE;
-
--- Adicionando chave primária na tabela departamento
+-- Adicionando chave estrangeira na tabela departamento
 ALTER TABLE elmasri.departamento 
 ADD FOREIGN KEY (cpf_gerente)
 REFERENCES elmasri.funcionario (cpf)
+NOT DEFERRABLE
 ;
 
--- Adicionando chave primária na tabela depedente
+-- Adicionando chave estrangeira na tabela depedente
 ALTER TABLE elmasri.dependente 
 ADD FOREIGN KEY (cpf_funcionario)
 REFERENCES elmasri.funcionario (cpf)
+NOT DEFERRABLE
 ;
 
--- Adicionando chave primária na tabela trabalha_em
+-- Adicionando chave estrangeira na tabela trabalha_em
 ALTER TABLE elmasri.trabalha_em 
 ADD FOREIGN KEY (cpf_funcionario)
 REFERENCES elmasri.funcionario (cpf)
+NOT DEFERRABLE
 ;
 
--- Adicionando chave primária na tabela funcionário
+-- Adicionando chave estrangeira na tabela funcionário
 ALTER TABLE elmasri.funcionario 
 ADD FOREIGN KEY (cpf_supervisor)
 REFERENCES elmasri.funcionario (cpf)
+NOT DEFERRABLE
 ;
 
 
--- Adicionando chave primária na tabela localizações_departamento
+-- Adicionando chave estrangeira na tabela localizações_departamento
 ALTER TABLE elmasri.localizacoes_departamento 
 ADD FOREIGN KEY (numero_departamento)
 REFERENCES elmasri.departamento (numero_departamento)
+NOT DEFERRABLE
 ;
 
--- Adicionando chave primária na tabela projeto
+-- Adicionando chave estrangeira na tabela projeto
 ALTER TABLE elmasri.projeto 
 ADD FOREIGN KEY (numero_departamento)
 REFERENCES elmasri.departamento (numero_departamento)
+NOT DEFERRABLE
 ;
 
--- Adicionando chave primária na tabela trabalha_em
+-- Adicionando chave estrangeira na tabela trabalha_em
 ALTER TABLE elmasri.trabalha_em 
 ADD FOREIGN KEY (numero_projeto)
 REFERENCES elmasri.projeto (numero_projeto)
+NOT DEFERRABLE
 ;
+
 
 -- Inserindo dados na tabela funcionário
 INSERT INTO elmasri.funcionario VALUES 
@@ -333,7 +316,7 @@ INSERT INTO elmasri.dependente VALUES (
 );
 
 
--- Inserindo dados na tabela trbalha_em
+-- Inserindo dados na tabela trabalha_em
 INSERT INTO elmasri.trabalha_em VALUES (
        "12345678966", 1, 32.5
 ),
@@ -380,5 +363,12 @@ INSERT INTO elmasri.trabalha_em VALUES (
        "98765432168", 20, 15.0
 ),
    (
-       "88866555576", 20, NULL
+       "88866555576", 20, 0
 );
+
+-- Adicionando chave estrangeira na tabela funcionario (jeito que achei para acabar com o looping)
+ALTER TABLE elmasri.funcionario
+ADD FOREIGN KEY (numero_departamento)
+REFERENCES elmasri.departamento (numero_departamento)
+NOT DEFERRABLE
+;

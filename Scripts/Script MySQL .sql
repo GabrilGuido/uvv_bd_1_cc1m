@@ -1,9 +1,13 @@
+-- Criando usuário
 create user gabrielguido identified by '1337';
 
+-- Consedendo privilégios ao usuário criado
 grant  all privileges on uvv.*  to gabrielguido;
 
+-- Criando a database que será utilizada
 CREATE DATABASE uvv;
 
+-- Entrando na database criada
 USE uvv;
 
 -- Criando tabela funcionário
@@ -18,7 +22,7 @@ CREATE TABLE funcionario (
                 salario DECIMAL(10,2) /*Salário do funcionário.*/,
                 cpf_supervisor CHAR(11) NOT NULL /*CPF do supervisor. Será uma FK para a própria tabela.*/,
                 numero_departamento INT NOT NULL /*Número do departamento do funcionário.*/,
-                PRIMARY KEY (cpf) /*Adicionando chave prímaria para a tabela*/
+                PRIMARY KEY (cpf, numero_departamento) /*Adicionando chave prímaria para a tabela*/
 );
 
 -- Adicionando comentários nas colunas da tabela
@@ -125,11 +129,11 @@ CREATE UNIQUE INDEX projeto_idx
  ON projeto
  ( nome_projeto );
 
--- Criando tabela trbalha_em
+-- Criando tabela trabalha_em
 CREATE TABLE trabalha_em (
                 cpf_funcionario CHAR(11) NOT NULL /*CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.*/,
                 numero_projeto INT NOT NULL /*Número do projeto. Faz parte da PK desta tabela e é uma FK para a tabela projeto.*/,
-                horas DECIMAL(3,1) /*Horas trabalhadas pelo funcionário neste projeto.*/,
+                horas DECIMAL(3,1) NOT NULL /*Horas trabalhadas pelo funcionário neste projeto.*/,
                 PRIMARY KEY (cpf_funcionario, numero_projeto) /*Adicionando chaves prímarias para a tabela*/
 );
 
@@ -139,6 +143,8 @@ ALTER TABLE trabalha_em MODIFY COLUMN cpf_funcionario CHAR(11) COMMENT 'CPF do f
 ALTER TABLE trabalha_em MODIFY COLUMN numero_projeto INTEGER COMMENT 'Número do projeto. Faz parte da PK desta tabela e é uma FK para a tabela projeto.';
 
 ALTER TABLE trabalha_em MODIFY COLUMN horas DECIMAL(3, 1) COMMENT 'Horas trabalhadas pelo funcionário neste projeto.';
+
+
 
 
 -- Criando tabela localizacoes_departamento
@@ -159,6 +165,7 @@ ALTER TABLE departamento
 ADD FOREIGN KEY (cpf_gerente)
 REFERENCES funcionario (cpf)
 ;
+
 
 -- Adicionando chave estrangeira na tabela depedente
 ALTER TABLE dependente 
@@ -196,6 +203,8 @@ ALTER TABLE trabalha_em
 ADD FOREIGN KEY (numero_projeto)
 REFERENCES projeto (numero_projeto)
 ;
+
+
 
 
 -- Inserindo dados na tabela funcionário
@@ -298,7 +307,7 @@ INSERT INTO dependente VALUES (
 );
 
 
--- Inserindo dados na tabela trbalha_em
+-- Inserindo dados na tabela trabalha_em
 INSERT INTO trabalha_em VALUES (
        "12345678966", 1, 32.5
 ),
@@ -345,11 +354,15 @@ INSERT INTO trabalha_em VALUES (
        "98765432168", 20, 15.0
 ),
    (
-       "88866555576", 20, NULL
+       "88866555576", 20, 0
 );
 
 
-
+-- Adicionando chave estrangeira na tabela funcionario (jeito que achei para acabar com o looping)
+ALTER TABLE funcionario
+ADD FOREIGN KEY (numero_departamento)
+REFERENCES departamento (numero_departamento)
+;
 
 
 
