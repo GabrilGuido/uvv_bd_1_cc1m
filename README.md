@@ -7,23 +7,24 @@
 
 ---
 
-## Descrição
+## Descrição para o uso
 
 - ## **Scripts**:
 
-  Todos os arquivos estão na pasta "Scripts".
+  - Todos os arquivos estão na pasta "Scripts".
 
   ### Como usar:
 
-  Basta copiar o conteúdo desejado para o SGBD apropriado e colar em sua linha de comando
+  - ScriptMySQL: Basta copiar seu conteúdo e colar no command line.
+  - ScriptPostgresSQL: Basta copiar o conteúdo e colar no terminal.
 
 - ## **Modelo Elmasri**:
 
-  Todos os arquivos estão na pasta "Power Architect"
+  - Todos os arquivos estão na pasta "Power Architect".
 
   ### Como usar:
 
-  Basta pegar o ariquivo de dentro da pasta e jogar dentro do Software "SQL Power Architect"
+  - Basta pegar o ariquivo de dentro da pasta e jogar dentro do Software "SQL Power Architect".
 
 ---
 
@@ -31,6 +32,7 @@
 
 - **SQL Power Architect**
 - **pgAdimin 4**
-- **isual Studio Code**
+- **Visual Studio Code**
 - **MySql**
 - **GitHub Desktop**
+- **Git**
