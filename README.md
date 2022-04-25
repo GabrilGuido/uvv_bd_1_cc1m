@@ -26,6 +26,9 @@
 
   - Basta pegar o ariquivo de dentro da pasta e jogar dentro do Software "SQL Power Architect".
 
+- ## **Perguntas e Respostas**:
+
+  - Todas as perguntas e repostas do trabalho estão na pastas "Perguntas e respostas"
 ---
 
 ## Softwares utilizados
