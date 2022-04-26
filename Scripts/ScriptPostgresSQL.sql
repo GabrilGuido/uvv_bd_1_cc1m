@@ -7,7 +7,7 @@ create user gabrielguido with encrypted password '1337'
 SUPERUSER;
 
 -- Conectar com o usuario criado no SGBD
-\connect postgres gabrielguido;
+\connect postgres gabrielguido
 --digitar senha do usuário gabrielguido: 1337
 
 -- Criando database UVV
@@ -286,7 +286,7 @@ INSERT INTO elmasri.projeto VALUES (
        20, 'Reorganiazãço', 'São Paulo', 1
 ),
    (
-       30, 'Novos benefícios', 'Mauá', 4
+       30, 'Novosbenefícios', 'Mauá', 4
 );
 
 -- Inserindo dados na tabela dependente
