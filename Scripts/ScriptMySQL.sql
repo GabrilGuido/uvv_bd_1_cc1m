@@ -22,7 +22,7 @@ CREATE TABLE funcionario (
                 salario DECIMAL(10,2) /*Salário do funcionário.*/,
                 cpf_supervisor CHAR(11) NOT NULL /*CPF do supervisor. Será uma FK para a própria tabela.*/,
                 numero_departamento INT NOT NULL /*Número do departamento do funcionário.*/,
-                PRIMARY KEY (cpf, numero_departamento) /*Adicionando chave prímaria para a tabela*/
+                PRIMARY KEY (cpf) /*Adicionando chave prímaria para a tabela*/
 );
 
 -- Adicionando comentários nas colunas da tabela
@@ -50,9 +50,7 @@ alter table funcionario
  add constraint check (sexo in ('M', 'F'));
 
 
-CREATE INDEX funcionario_idx
- ON funcionario
- ( cpf_supervisor );
+
 
 -- Criando tabela dependente
 CREATE TABLE dependente (

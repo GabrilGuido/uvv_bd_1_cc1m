@@ -1,19 +1,16 @@
---Entrar com o login do usuário postgres
-su - postgres
---digitar a senha do usuário postgres: postgres
+-- Seguir passo a passo
+psql su - postgres
+-- digitar a senha do usuário postgres: postgres
 
---Criando o usuário gabrielguido 
-createuser gabrielguido -dPs
---digitar senha: 123456
---confirmar senha: 123456
---digitar senha administrativa do BD: computacao@raiz
+-- Criando o usuário gabrielguido 
+create user gabrielguido with encrypted password '1337'
+SUPERUSER;
 
---Entrando no postgres
-psql
---digitar senha administrativa do BD: computacao@raiz
+-- Conectar com o usuario criado no SGBD
+\connect postgres gabrielguido;
+--digitar senha do usuário gabrielguido: 1337
 
-
---Criando database UVV
+-- Criando database UVV
 CREATE DATABASE uvv
 with
 OWNER = gabrielguido
@@ -24,19 +21,24 @@ LC_CTYPE = 'pt_BR.UTF-8'
 ALLOW_CONNECTIONS = true
 ;
 
---Conectando o usuário gabrielguido ao BD 
-\connect uvv gabrielguido;
---digitar senha do usuário gabrielguido: 123456
+-- Conectando o usuário gabrielguido ao BD 
+\connect uvv gabrielguido
 
---Criando esquema elmasri
-create schema elmasri authorization gabrielguido;
+
+-- Dando privilégios ao usuário criado
+GRANT all privileges on database uvv to gabrielguido with grant option granted by gabrielguido;
+
+-- Criando esquema elmasri
+CREATE SCHEMA elmasri authorization gabrielguido;
+
+SET SEARCH_PATH TO elmasri, '$user', public;
 
 --Botando o esquema elmasri como padrão
-alter user gabrielguido
-set search_path to elmasri, "$user", public;
+ALTER user gabrielguido
+SET search_path TO elmasri, "$user", public;
 
-
---Criando tabela funcionários
+-- Copiar e colar o scripts abaixo
+-- Criando tabela funcionários
 CREATE TABLE elmasri.funcionario (
                 --Tabela que armazena as informações dos funcionários.
                 cpf CHAR(11) NOT NULL /*CPF do funcionário. Será a PK da tabela.*/,
@@ -49,7 +51,7 @@ CREATE TABLE elmasri.funcionario (
                 salario NUMERIC(10,2) /*Salário do funcionário.*/,
                 cpf_supervisor CHAR(11) NOT NULL /*CPF do supervisor. É uma FK para a própria tabela.*/,
                 numero_departamento INTEGER NOT NULL /*Número do departamento do funcionário.*/,
-                CONSTRAINT pk_funcionario PRIMARY KEY (cpf, numero_departamento)/*Adicionando as chaves primárias da tabela*/
+                CONSTRAINT pk_funcionario PRIMARY KEY (cpf)/*Adicionando as chaves primárias da tabela*/
 );
 
 -- Adicionando comentários nas colunas da tabela
@@ -66,15 +68,11 @@ COMMENT ON COLUMN elmasri.funcionario.numero_departamento IS 'Número do departa
 
 -- Adcionando constraint check no atributo sexo
 alter table elmasri.funcionario
- add constraint check (sexo in ('M', 'F'));
+ add constraint sexo_funcionario check (sexo in ('M', 'F'));
 
-CREATE INDEX funcionario_idx
- ON elmasri.funcionario
- ( cpf_supervisor );
 
-CLUSTER funcionario_idx ON funcionario;
 
---Criando tabela do dependente do funcionário
+-- Criando tabela do dependente do funcionário
 CREATE TABLE elmasri.dependente (
                 cpf_funcionario CHAR(11) NOT NULL /*CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.*/,
                 nome_dependente VARCHAR(15) NOT NULL/*Nome do dependente. Faz parte da PK desta tabela.*/,
@@ -94,7 +92,7 @@ COMMENT ON COLUMN elmasri.dependente.parentesco IS 'Descrição do parentesco do
 
 -- Adcionando constraint check no atributo sexo
 alter table elmasri.dependente
- add constraint check (sexo in ('M', 'F'));
+ add constraint sexo_dependente check (sexo in ('M', 'F'));
 
 --Criando tabela do departamento
 CREATE TABLE elmasri.departamento (
@@ -115,7 +113,7 @@ COMMENT ON COLUMN elmasri.departamento.data_inicio_gerente IS 'Data do início d
 --Criando uma chave alternativa
 CREATE UNIQUE INDEX departamento_idx
  ON elmasri.departamento
- ( nome_departamento )
+ ( nome_departamento );
 
 --Criando tabela do proejeto
 CREATE TABLE elmasri.projeto (
@@ -193,7 +191,6 @@ REFERENCES elmasri.funcionario (cpf)
 NOT DEFERRABLE
 ;
 
-
 -- Adicionando chave estrangeira na tabela localizações_departamento
 ALTER TABLE elmasri.localizacoes_departamento 
 ADD FOREIGN KEY (numero_departamento)
@@ -218,155 +215,155 @@ NOT DEFERRABLE
 
 -- Inserindo dados na tabela funcionário
 INSERT INTO elmasri.funcionario VALUES 
-   (
-   "33344555587", "Fernando", "T", "Wong", '1955-12-08', "Rua da Lapa, 34, São Paulo, SP", "M", 40.000, 33344555587, 5 
-),
-   (
-     "88866555576" , "Jorge", "E", "Brito", '1937-11-10', "Rua do Horto, 35, São Paulo, SP ", "M", 55.000, 8886655557, 1 
-),
-   (
-   "12345678966", "João", "B", "Silva", '1965.11.09', "Rua das Flores, 751, São Paulo, SP", "M", 30.000, 33344555587, 5 
-), 
-   (
-     "98765432168" , "Jennifer", "S", "Souza", '1941-06-20', "Av.Arthur de Lima, 54, Santo André, SP", "F", 43.000, 88866555576, 4
-), 
-   (
-     "99988777767" , "Alice", "J", "Zelaya", '1968-01-19', "Rua Souza Lima, 35 ,Curitiba, PR", "F", 25.000, 98765432168, 4
-),   
-   (
-     "66688444476" , "Ronaldo", "K", "Lima", '1962-09-15', "Rua Rebouças, 65, Piracicaba, SP", "M", 38.000, 33344555587, 5 
-),
-   (
-     "45345345376" , "Joice", "A", "Leite", '1972-07-31', "Av.Lucas Obes, 74, São Paulo, SP", "F", 25.000, 33344555587, 5 
-),
-   (
-     "98798798733" , "André", "V", "Pereira", '1969-03-29', "Rua Timbira, 35, São Paulo, SP", "M", 25.000, 98765432168, 4 
-);
+(
+   88866555576, 'Jorge', 'E', 'Brito', '1937-11-10', 'Rua do Horto, 35, São Paulo, SP', 'M', 55000, 88866555576, 5
+   ),
+(
+   33344555587, 'Fernando', 'T', 'Wong', '1955-12-08', 'Rua da Lapa, 34, São Paulo, SP', 'M', 40000, 88866555576, 5
+   ),
+(
+   12345678966, 'João', 'B', 'Silva', '1965-01-09', 'Rua das Flores, 751, São Paulo, SP', 'M', 30000, 33344555587, 4
+   ),
+(
+   66688444476, 'Ronaldo', 'K', 'Lima', '1962-09-15', 'Rua Rebouças, 65, Piracicaba, SP', 'M', 38000, 33344555587, 4
+   ),
+(
+   45345345376, 'Joice', 'A', 'Leite', '1972-07-31', 'Av. Lucas Obes, 74, São Paulo, SP', 'F', 25000, 33344555587, 5
+   ),
+(
+   98765432168, 'Jennifer', 'S', 'Souza', '1941-06-20', 'Av. Arthur de Lima, 54, Santo André, SP', 'F', 43000, 88866555576, 5
+   ),
+(
+   99988777767, 'Alice', 'J', 'Zelaya', '1968-01-19', 'Rua Souza Lima, 35, Curitiba, PR', 'F', 25000, 98765432168, 4
+   ),
+(
+   98798798733, 'André', 'V', 'Pereira', '1969-03-29', 'Rua Timbira, 35, São Paulo, SP', 'M', 25000, 98765432168, 1
+   );
 
 
 -- Inserindo dados na tabela departamento
 INSERT INTO elmasri.departamento VALUES (
-      5, "Pesquisa", "33344555587", '1988-05-22'
+      5, 'Pesqusia', 33344555587, '1988-05-22'
 ),
    (
-       4, "Administração", "98765432168", '1995-01-01'
+       4, 'Administração', 98765432168, '1995-01-01'
 ),
    (
-       1, "Matriz", "88866555576", '1981-06-19'
+       1, 'Matriz', 88866555576, '1981-06-19'
 );
 
 -- Inserindo dados na tabela localizações_departamento
 INSERT INTO elmasri.localizacoes_departamento VALUES (
-       1, "São Paulo"
+       1, 'São Paulo'
 ),
    (
-       4, "Mauá"
+       4, 'Mauá'
 ),
    (
-       5, "Santo André"
+       5, 'Santo André'
 ),
    (
-       5, "Itu"
+       5, 'Itu'
 ),
    (
-       5, "São Paulo"
+       5, 'São Paulo'
 );
 
 -- Inserindo dados na tabela projeto
 INSERT INTO elmasri.projeto VALUES (
-       1, "ProdutoX", "Santo André", 5 
+       1, 'Produto X', 'Santo André', 5 
 ),
    (
-       2, "ProdutoY", "Itu", 5 
+       2, 'Produto Y', 'Itu', 5
 ),
    (
-       3, "ProdutoZ", "São Paulo", 5
+       3, 'Produto Z', 'São Paulo', 5
 ),
    (
-       10, "Informatização", "Mauá", 4
+       10, 'Informatização', 'Mauá', 4
 ),
    (
-       20, "Reotganização", "São Paulo", 1
+       20, 'Reorganiazãço', 'São Paulo', 1
 ),
    (
-       30, "Novosbenefícios", "Mauá", 4
+       30, 'Novos benefícios', 'Mauá', 4
 );
 
 -- Inserindo dados na tabela dependente
 INSERT INTO elmasri.dependente VALUES (
-       "33344555587", "Alicia", "F", '1986-04-05', "Filha"
+       33344555587, 'Alicia', 'F', '1986-04-05', 'Filha'
 ),
    (
-       "33344555587", "Tiago", "M", '1983-10-25', "Filho"
+       33344555587, 'Tiago', 'M', '1983-10-25', 'Filho'
 ),
    (
-       "33344555587", "Janaína", "F", '1958-05-03', "Esposa"
+       33344555587, 'Janaína', 'F', '1958-05-03', 'Esposa'
 ),
    (
-       "98765432168", "Antonio", "M", '1942-02-18', "Marido"
+       98765432168, 'Antonio', 'M', '1942-02-18', 'Marido'
 ),
    (
-       "12345678966", "Michael", "M", '1988-01-04', "Filho"
+       12345678966, 'Michael', 'M', '1988-01-04', 'Filho'
 ),
    (
-       "12345678966", "Alicia", "F", '1988-12-30', "Filha"
+       12345678966, 'Alicia', 'F', '1988-12-30', 'Filha'
 ),
    (
-       "12345678966", "Elizabeth", "F", '1967-05-05', "Esposa"
+       12345678966, 'Elizabeth', 'F', '1967-05-05', 'Esposa'
 );
 
 
 -- Inserindo dados na tabela trabalha_em
 INSERT INTO elmasri.trabalha_em VALUES (
-       "12345678966", 1, 32.5
+       12345678966, 1, 32.5
 ),
    (
-       "12345678966", 2, 7.5
+       12345678966, 2, 7.5
 ),
    (
-       "66688444476", 3, 40.0
+       66688444476, 3, 40.0
 ),
    (
-       "45345345376", 1, 20.0
+       45345345376, 1, 20.0
 ),
    (
-       "45345345376", 2, 20.0
+       45345345376, 2, 20.0
 ),
    (
-       "33344555587", 2, 10.0
+       33344555587, 2, 10.0
 ),
    (
-       "33344555587", 3, 10.0
+       33344555587, 3, 10.0
 ),
    (
-       "33344555587", 10, 10.0
+       33344555587, 10, 10.0
 ),
    (
-       "33344555587", 20, 10.0
+       33344555587, 20, 10.0
 ),
    (
-       "99988777767", 30, 30.0
+       99988777767, 30, 30.0
 ),
    (
-       "99988777767", 10, 10.0
+       99988777767, 10, 10.0
 ),
    (
-       "98798798733", 10, 35.0
+       98798798733, 10, 35.0
 ),
    (
-       "98798798733", 30, 5.0
+       98798798733, 30, 5.0
 ),
    (
-       "98765432168", 30, 20.0
+       98765432168, 30, 20.0
 ),
    (
-       "98765432168", 20, 15.0
+       98765432168, 20, 15.0
 ),
    (
-       "88866555576", 20, 0
+       88866555576, 20, 0
 );
 
--- Adicionando chave estrangeira na tabela funcionario (jeito que achei para acabar com o looping)
+-- Adicionando chave estrangeira na tabela funcionario após inserir todos os dados(jeito que achei para acabar com o looping)
 ALTER TABLE elmasri.funcionario
 ADD FOREIGN KEY (numero_departamento)
 REFERENCES elmasri.departamento (numero_departamento)
