@@ -22,7 +22,7 @@
 
 ## 6)
 
-- Para impor tal regra no projeto, basta ir na relação e mudar a Cardinality da FKtable: departamento para "Zero or One". Já no banco de dados...
+- Para impor tal regra no projeto, basta ir na relação e mudar a Cardinality da FKtable: departamento para "Zero or One". Já no banco de dados foi necessário criar uma chave alternativa na tabela departamentos.
 
 ## 7)
 
@@ -30,7 +30,7 @@
 
 ## 8)
 
--
+- O único tipo de relacionamento onde se é armazenados dados é o relacionamento N:N, que para existir é necessário que haja uma tabela intermediária, que armazena dados, entre a relação de outras duas tabelas.
 
 ## 9)
 

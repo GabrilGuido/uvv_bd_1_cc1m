@@ -1,11 +1,25 @@
+-- Faça o passo a passo dessa primeira etapa 
+
+-- Login com usuário root
+mysql -u root -p
+comtupacao@raiz
+
+-- Criando a database que será utilizada
+CREATE DATABASE uvv;
+
 -- Criando usuário
 create user gabrielguido identified by '1337';
 
 -- Consedendo privilégios ao usuário criado
 grant  all privileges on uvv.*  to gabrielguido;
 
--- Criando a database que será utilizada
-CREATE DATABASE uvv;
+-- Usuário root para meu usuário
+system mysql -u gabrielguido -p
+1337
+
+
+-- Pode copiar o conteúdo abaixo e colar
+
 
 -- Entrando na database criada
 USE uvv;
