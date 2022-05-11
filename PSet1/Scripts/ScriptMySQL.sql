@@ -40,13 +40,13 @@ CREATE TABLE funcionario (
 );
 
 -- Adicionando comentários nas colunas da tabela
-ALTER TABLE funcionario MODIFY COLUMN cpf CHAR(11) COMMENT 'CPF do funcionário. Será a PK da tabela.';
+ALTER TABLE funcionario MODIFY COLUMN cpf CHAR(11) NOT NULL COMMENT 'CPF do funcionário. Será a PK da tabela.';
 
-ALTER TABLE funcionario MODIFY COLUMN primeiro_nome VARCHAR(15) COMMENT 'Primeiro nome do funcionário.';
+ALTER TABLE funcionario MODIFY COLUMN primeiro_nome VARCHAR(15) NOT NULL COMMENT 'Primeiro nome do funcionário.';
 
 ALTER TABLE funcionario MODIFY COLUMN nome_meio CHAR(1) COMMENT 'Inicial do nome do meio.';
 
-ALTER TABLE funcionario MODIFY COLUMN ultimo_nome VARCHAR(15) COMMENT 'Sobrenome do funcionário.';
+ALTER TABLE funcionario MODIFY COLUMN ultimo_nome VARCHAR(15) NOT NULL COMMENT 'Sobrenome do funcionário.';
 
 ALTER TABLE funcionario MODIFY COLUMN endereco VARCHAR(150) COMMENT 'Endereço do funcionário.';
 
@@ -54,9 +54,9 @@ ALTER TABLE funcionario MODIFY COLUMN sexo CHAR(1) COMMENT 'Sexo do funcionário
 
 ALTER TABLE funcionario MODIFY COLUMN salario DECIMAL(10, 2) COMMENT 'Salário do funcionário.';
 
-ALTER TABLE funcionario MODIFY COLUMN cpf_supervisor CHAR(11) COMMENT 'CPF do supervisor. Será uma FK para a própria tabela.';
+ALTER TABLE funcionario MODIFY COLUMN cpf_supervisor CHAR(11) NOT NULL COMMENT 'CPF do supervisor. Será uma FK para a própria tabela.';
 
-ALTER TABLE funcionario MODIFY COLUMN numero_departamento INTEGER COMMENT 'Número do departamento do funcionário.';
+ALTER TABLE funcionario MODIFY COLUMN numero_departamento NOT NULL INTEGER COMMENT 'Número do departamento do funcionário.';
 
 
 -- Adcionando constraint check no atributo sexo
@@ -105,9 +105,9 @@ CREATE TABLE departamento (
 -- Adicionando comentários nas colunas da tabela
 ALTER TABLE departamento MODIFY COLUMN numero_departamento INTEGER COMMENT 'Número do departamento. É a PK desta tabela.';
 
-ALTER TABLE departamento MODIFY COLUMN nome_departamento VARCHAR(15) COMMENT 'Nome do departamento. Deve ser único.';
+ALTER TABLE departamento MODIFY COLUMN nome_departamento VARCHAR(15) NOT NULL COMMENT 'Nome do departamento. Deve ser único.';
 
-ALTER TABLE departamento MODIFY COLUMN cpf_gerente CHAR(11) COMMENT 'CPF do gerente do departamento. FK para a tabela funcionários.';
+ALTER TABLE departamento MODIFY COLUMN cpf_gerente CHAR(11) NOT NULL COMMENT 'CPF do gerente do departamento. FK para a tabela funcionários.';
 
 ALTER TABLE departamento MODIFY COLUMN data_inicio_gerente DATE COMMENT 'Data do início do gerente no departamento.';
 
@@ -127,13 +127,13 @@ CREATE TABLE projeto (
 );
 
 -- Adicionando comentários nas colunas da tabela
-ALTER TABLE projeto MODIFY COLUMN numero_projeto INTEGER COMMENT 'Número do projeto. É a PK desta tabela.';
+ALTER TABLE projeto MODIFY COLUMN numero_projeto INTEGER NOT NULL COMMENT 'Número do projeto. É a PK desta tabela.';
 
-ALTER TABLE projeto MODIFY COLUMN nome_projeto VARCHAR(15) COMMENT 'Nome do projeto. Deve ser único.';
+ALTER TABLE projeto MODIFY COLUMN nome_projeto VARCHAR(15) NOT NULL COMMENT 'Nome do projeto. Deve ser único.';
 
 ALTER TABLE projeto MODIFY COLUMN local_projeto VARCHAR(15) COMMENT 'Localização do projeto.';
 
-ALTER TABLE projeto MODIFY COLUMN numero_departamento INTEGER COMMENT 'Número do departamento. É uma FK para a tabela departamento.';
+ALTER TABLE projeto MODIFY COLUMN numero_departamento INTEGER NOT NULL COMMENT 'Número do departamento. É uma FK para a tabela departamento.';
 
 
 -- Criando chave alternativa
@@ -150,11 +150,11 @@ CREATE TABLE trabalha_em (
 );
 
 -- Adicionando comentários nas colunas da tabela
-ALTER TABLE trabalha_em MODIFY COLUMN cpf_funcionario CHAR(11) COMMENT 'CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.';
+ALTER TABLE trabalha_em MODIFY COLUMN cpf_funcionario CHAR(11) NOT NULL COMMENT 'CPF do funcionário. Faz parte da PK desta tabela e é uma FK para a tabela funcionário.';
 
-ALTER TABLE trabalha_em MODIFY COLUMN numero_projeto INTEGER COMMENT 'Número do projeto. Faz parte da PK desta tabela e é uma FK para a tabela projeto.';
+ALTER TABLE trabalha_em MODIFY COLUMN numero_projeto INTEGER NOT NULL COMMENT 'Número do projeto. Faz parte da PK desta tabela e é uma FK para a tabela projeto.';
 
-ALTER TABLE trabalha_em MODIFY COLUMN horas DECIMAL(3, 1) COMMENT 'Horas trabalhadas pelo funcionário neste projeto.';
+ALTER TABLE trabalha_em MODIFY COLUMN horas DECIMAL(3, 1) NOT NULL COMMENT 'Horas trabalhadas pelo funcionário neste projeto.';
 
 
 
@@ -167,9 +167,9 @@ CREATE TABLE localizacoes_departamento (
 );
 
 -- Adicionando comentários nas colunas da tabela
-ALTER TABLE localizacoes_departamento MODIFY COLUMN numero_departamento INTEGER COMMENT 'Número do departamento. Faz parta da PK desta tabela e também é uma FK para a tabela departamento.';
+ALTER TABLE localizacoes_departamento MODIFY COLUMN numero_departamento INTEGER NOT NULL COMMENT 'Número do departamento. Faz parta da PK desta tabela e também é uma FK para a tabela departamento.';
 
-ALTER TABLE localizacoes_departamento MODIFY COLUMN local VARCHAR(15) COMMENT 'Localização do departamento. Faz parte da PK desta tabela.';
+ALTER TABLE localizacoes_departamento MODIFY COLUMN local VARCHAR(15) NOT NULL COMMENT 'Localização do departamento. Faz parte da PK desta tabela.';
 
 
 -- Adicionando chave estrangeira na tabela departamento
@@ -222,28 +222,28 @@ REFERENCES projeto (numero_projeto)
 -- Inserindo dados na tabela funcionário
 INSERT INTO funcionario VALUES 
    (
-   "33344555587", "Fernando", "T", "Wong", '1955-12-08', "Rua da Lapa, 34, São Paulo, SP", "M", 40.000, 33344555587, 5 
+   "33344555587", "Fernando", "T", "Wong", '1955-12-08', "Rua da Lapa, 34, São Paulo, SP", "M", 40000, 33344555587, 5 
 ),
    (
-     "88866555576" , "Jorge", "E", "Brito", '1937-11-10', "Rua do Horto, 35, São Paulo, SP ", "M", 55.000, 88866555576, 1 
+     "88866555576" , "Jorge", "E", "Brito", '1937-11-10', "Rua do Horto, 35, São Paulo, SP ", "M", 55000, 88866555576, 1 
 ),
    (
-   "12345678966", "João", "B", "Silva", '1965.11.09', "Rua das Flores, 751, São Paulo, SP", "M", 30.000, 33344555587, 5 
+   "12345678966", "João", "B", "Silva", '1965.11.09', "Rua das Flores, 751, São Paulo, SP", "M", 30000, 33344555587, 5 
 ), 
    (
-     "98765432168" , "Jennifer", "S", "Souza", '1941-06-20', "Av.Arthur de Lima, 54, Santo André, SP", "F", 43.000, 88866555576, 4
+     "98765432168" , "Jennifer", "S", "Souza", '1941-06-20', "Av.Arthur de Lima, 54, Santo André, SP", "F", 43000, 88866555576, 4
 ), 
    (
-     "99988777767" , "Alice", "J", "Zelaya", '1968-01-19', "Rua Souza Lima, 35 ,Curitiba< PR", "F", 25.000, 98765432168, 4
+     "99988777767" , "Alice", "J", "Zelaya", '1968-01-19', "Rua Souza Lima, 35 ,Curitiba< PR", "F", 25000, 98765432168, 4
 ),   
    (
-     "66688444476" , "Ronaldo", "K", "Lima", '1962-09-15', "Rua Rebouças, 65, Piracicaba, SP", "M", 38.000, 33344555587, 5 
+     "66688444476" , "Ronaldo", "K", "Lima", '1962-09-15', "Rua Rebouças, 65, Piracicaba, SP", "M", 38000, 33344555587, 5 
 ),
    (
-     "45345345376" , "Joice", "A", "Leite", '1972-07-31', "Av.Lucas Obes, 74, São Paulo, SP", "F", 25.000, 33344555587, 5 
+     "45345345376" , "Joice", "A", "Leite", '1972-07-31', "Av.Lucas Obes, 74, São Paulo, SP", "F", 25000, 33344555587, 5 
 ),
    (
-     "98798798733" , "André", "V", "Pereira", '1969-03-29', "Rua Timbira, 35, São Paulo, SP", "M", 25.000, 98765432168, 4 
+     "98798798733" , "André", "V", "Pereira", '1969-03-29', "Rua Timbira, 35, São Paulo, SP", "M", 25000, 98765432168, 4 
 );
 
 -- Inserindo dados na tabela departamento

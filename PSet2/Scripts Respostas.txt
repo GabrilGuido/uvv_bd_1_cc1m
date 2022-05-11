@@ -1,0 +1,80 @@
+-- Respostas PSet2
+
+-- 1)
+SELECT numero_departamento, round(AVG(salario),1) AS MediaSalarial
+FROM funcionario
+GROUP BY numero_departamento
+;
+
+-- 2)
+
+SELECT sexo, round(AVG(salario),1) AS MediaSalarial
+FROM funcionario
+GROUP BY sexo
+;
+
+-- 3)
+
+SELECT nome_departamento AS 'Nome do departamento',
+ CONCAT(f.primeiro_nome,' ', f.nome_meio,'.', f.ultimo_nome) AS 'Nome completo'
+, f.data_nascimento AS 'Data de nascimento'
+, YEAR(CURRENT_TIMESTAMP())-YEAR(f.data_nascimento) AS Idade
+FROM departamento 
+INNER JOIN funcionario f
+ORDER BY nome_departamento
+;
+
+-- 4)
+
+SELECT CONCAT(f.primeiro_nome,' ', f.nome_meio,' ', f.ultimo_nome) AS 'Nome completo',
+YEAR(CURRENT_TIMESTAMP())-YEAR(f.data_nascimento) AS 'Idade',
+f.salario AS 'Salario atual',
+IF(salario < 35000, salario * 1.2, salario * 1.15) AS 'Salario ajustado'
+FROM funcionario f
+;
+
+-- 5)
+
+SELECT nome_departamento, primeiro_nome AS 'Gerente', 0 AS funcionario
+FROM funcionario  
+INNER JOIN departamento 
+WHERE cpf = cpf_gerente
+GROUP BY nome_departamento ASC , salario DESC
+UNION
+SELECT  nome_departamento, 0, primeiro_nome AS 'Funcionario' 
+FROM funcionario f 
+INNER JOIN departamento d
+WHERE cpf != cpf_gerente AND f.numero_departamento = d.numero_departamento
+GROUP BY nome_departamento ASC , salario DESC
+;
+
+-- 6)
+
+SELECT CONCAT(f.primeiro_nome,' ', f.nome_meio,' ', f.ultimo_nome) AS 'Nome completo', numero_departamento, nome_dependente, YEAR(CURRENT_TIMESTAMP())-YEAR(d.data_nascimento) AS 'Idade', 
+if(d.sexo = "M","Masculino","Feminino") AS Sexo
+FROM funcionario f 
+INNER JOIN dependente d
+WHERE f.cpf = d.cpf_funcionario
+;
+
+-- 7)
+
+SELECT CONCAT(f.primeiro_nome,' ', f.nome_meio,' ', f.ultimo_nome) AS 'Nome completo', f.numero_departamento AS 'Numero departamento', round(f.salario),1 AS Salario
+FROM funcionario f
+INNER JOIN dependente d
+ON f.cpf != d.cpf_funcionario
+GROUP BY f.cpf
+;
+
+-- 8)
+
+SELECT nome_departamento, nome_projeto, CONCAT(f.primeiro_nome,' ', f.nome_meio,' ', f.ultimo_nome) AS Nome, horas
+FROM projeto p
+INNER JOIN funcionario f ON (p.numero_departamento = f.numero_departamento)
+INNER JOIN trabalha_em t ON (p.numero_projeto = t.numero_projeto)
+INNER JOIN departamento d ON (p.numero_departamento = d.numero_departamento)
+GROUP BY nome_departamento, nome_projeto, Nome
+;
+
+--9)
+
