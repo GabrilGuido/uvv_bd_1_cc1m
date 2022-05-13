@@ -60,20 +60,14 @@ WHERE f.cpf = d.cpf_funcionario
 -- 7)
 -- REVISAR
 
-SELECT CONCAT(f.primeiro_nome,' ', f.nome_meio,' ', f.ultimo_nome) AS 'Nome completo', f.numero_departamento AS 'Numero departamento', f.salario 
-FROM funcionario f
-LEFT JOIN dependente d
-ON f.cpf = d.cpf_funcionario
-GROUP BY f.cpf
-;
-
-SELECT CONCAT(f.primeiro_nome,' ', f.nome_meio,' ', f.ultimo_nome) AS 'Nome completo', f.numero_departamento AS 'Numero departamento', f.salario 
+SELECT CONCAT(f.primeiro_nome,' ', f.nome_meio,' ', f.ultimo_nome) AS Nome, f.numero_departamento AS 'Numero departamento', f.salario 
 FROM funcionario f
 EXCEPT
-SELECT CONCAT(f.primeiro_nome,' ', f.nome_meio,' ', f.ultimo_nome) AS 'Nome completo', f.numero_departamento AS 'Numero departamento', f.salario 
-FROM dependente d 
-INNER JOIN funcionario f
-ON d.cpf_funcionario = f.cpf
+SELECT CONCAT(f.primeiro_nome,' ', f.nome_meio,' ', f.ultimo_nome) AS Nome, f.numero_departamento AS 'Numero departamento', f.salario 
+FROM funcionario f
+INNER JOIN dependente d 
+ON f.cpf = d.cpf_funcionario
+ORDER BY numero_departamento ASC
 ;
 
 -- 8)
